@@ -9,7 +9,9 @@ class PostResponse(BaseModel):
     caption: str
     image_url: str
     owner: UserPublic
-
+    likes_count: int
+    
+    
     model_config = {
         "from_attributes": True
     }

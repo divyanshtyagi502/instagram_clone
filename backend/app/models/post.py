@@ -9,3 +9,7 @@ class Post(Base):
     image_url = Column(String)
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="posts")
+    likes = relationship("Like", back_populates="post")
+    @property
+    def likes_count(self):
+        return len(self.likes)
