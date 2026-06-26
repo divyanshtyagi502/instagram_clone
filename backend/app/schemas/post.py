@@ -1,5 +1,5 @@
 from pydantic import BaseModel, EmailStr
-
+from app.schemas.user import UserPublic
 class PostCreate(BaseModel):
     caption: str
     image_url: str
@@ -8,7 +8,7 @@ class PostResponse(BaseModel):
     id: int
     caption: str
     image_url: str
-    owner_id: int
+    owner: UserPublic
 
     model_config = {
         "from_attributes": True

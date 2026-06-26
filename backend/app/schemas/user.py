@@ -13,6 +13,9 @@ class UserResponse(BaseModel):
     id: int
     email: EmailStr
     username: str
+class UserPublic(BaseModel):
+    id: int
+    username: str    
 
 
     class Config:
