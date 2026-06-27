@@ -17,6 +17,14 @@ class UserPublic(BaseModel):
     id: int
     username: str    
 
+class UserProfile(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    
+    posts_count: int
+    followers_count: int
+    following_count: int
 
     class Config:
         from_attributes = True

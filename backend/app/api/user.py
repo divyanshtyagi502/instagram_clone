@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from app.core.auth import get_current_user
 from app.db.dependencies import get_db
 from app.models.user import User
-from app.schemas.user import UserCreate, UserResponse, UserLogin
+from app.schemas.user import UserCreate, UserProfile, UserResponse, UserLogin
 from app.core.security import hash_password
 from app.schemas.token import Token
 from app.core.security import (
@@ -12,6 +12,8 @@ from app.core.security import (
     verify_password,
     create_access_token,
 )
+from app.models.post import Post
+from app.schemas.post import PostResponse
 router = APIRouter()
 
 @router.get("/me")
@@ -67,3 +69,37 @@ def register_user(user: UserCreate, db: Session = Depends(get_db)):
     db.commit()
     db.refresh(new_user)
     return new_user
+
+@router.get("/{user_id}", response_model=UserProfile)
+def get_user_profile(user_id: int, db: Session = Depends(get_db)):
+    existing_user = db.query(User).filter(User.id == user_id).first()
+    if not existing_user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    posts_count = len(existing_user.posts)
+    followers_count = len(existing_user.followers)
+    following_count = len(existing_user.following)
+    return UserProfile(
+        id=existing_user.id,
+        username=existing_user.username,
+        email=existing_user.email,
+        posts=posts_count,
+        followers=followers_count,
+        following=following_count
+    )
+    
+@router.get("/{user_id}/posts", response_model=list[PostResponse])
+def get_user_posts(user_id: int, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.id == user_id).first()
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found"
+        )
+    posts = db.query(Post).filter(Post.owner_id == user_id).order_by(Post.created_at.desc()).all()
+    return posts    
+      
+    
+    
