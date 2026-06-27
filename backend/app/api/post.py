@@ -7,6 +7,7 @@ from app.models.post import Post
 from app.models.user import User
 from app.schemas.post import PostCreate, PostResponse
 from app.models.like import Like
+from app.models.comment import Comment
 
 router = APIRouter(tags=["Posts"])
 

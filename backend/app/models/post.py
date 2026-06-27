@@ -10,6 +10,7 @@ class Post(Base):
     owner_id = Column(Integer, ForeignKey("users.id"))
     owner = relationship("User", back_populates="posts")
     likes = relationship("Like", back_populates="post")
+    comments = relationship("Comment", back_populates="post", cascade="all, delete")
     @property
     def likes_count(self):
         return len(self.likes)
