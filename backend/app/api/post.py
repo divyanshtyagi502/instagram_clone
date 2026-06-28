@@ -11,6 +11,27 @@ from app.models.comment import Comment
 
 router = APIRouter(tags=["Posts"])
 
+@router.get("/feed", response_model=list[PostResponse])
+def get_feed(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user)
+):
+    
+    following_ids = [
+        follow.following_id for follow in current_user.following
+    ]
+    
+    
+    following_ids.append(current_user.id)
+    
+    feed_posts = (
+        db.query(Post)
+        .filter(Post.owner_id.in_(following_ids))
+        .all()
+    )
+    
+    return feed_posts
+
 @router.post("/posts", response_model=PostResponse)
 def create_post(
     post: PostCreate,
@@ -85,23 +106,3 @@ def like_post(
     return {"detail": "Post liked successfully"}
 
 
-@router.get("/feed", response_model=list[PostResponse])
-def get_feed(
-    db: Session = Depends(get_db),
-    current_user: User = Depends(get_current_user)
-):
-    
-    following_ids = [
-        follow.following_id for follow in current_user.following
-    ]
-    
-    
-    following_ids.append(current_user.id)
-    
-    feed_posts = (
-        db.query(Post)
-        .filter(Post.owner_id.in_(following_ids))
-        .all()
-    )
-    
-    return feed_posts

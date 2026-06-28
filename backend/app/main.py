@@ -11,16 +11,22 @@ from app.models.user import User
 from app.models.post import Post
 from app.models.follow import Follow
 from app.api.follow import router as follow_router
-
+from fastapi.routing import APIRoute, APIRouter
 
 print(Base.metadata.tables.keys())
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI(title="Instagram Clone MVP")
-app.include_router(user_router)
 app.include_router(post_router)
+app.include_router(user_router)
 app.include_router(comment_router)
 app.include_router(follow_router)
+
+
+for route in app.routes:
+    print(type(route), getattr(route, "path", None))
+        
+        
 @app.get("/")
 def root():
     return {"message": "Welcome to the Instagram Clone MVP!"}

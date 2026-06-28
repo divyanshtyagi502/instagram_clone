@@ -54,7 +54,7 @@ def get_followers(
         )
 
     followers = db.query(Follow).filter(
-        Follow.followed_id == user_id
+        Follow.following_id == user_id
     ).all()
 
     return {

@@ -16,6 +16,7 @@ from app.models.post import Post
 from app.schemas.post import PostResponse
 router = APIRouter()
 
+
 @router.get("/me")
 def get_me(
     current_user=Depends(get_current_user)
@@ -85,10 +86,10 @@ def get_user_profile(user_id: int, db: Session = Depends(get_db)):
         id=existing_user.id,
         username=existing_user.username,
         email=existing_user.email,
-        posts=posts_count,
-        followers=followers_count,
-        following=following_count
-    )
+        posts_count=posts_count,
+        followers_count=followers_count,
+        following_count=following_count
+    ) 
     
 @router.get("/{user_id}/posts", response_model=list[PostResponse])
 def get_user_posts(user_id: int, db: Session = Depends(get_db)):

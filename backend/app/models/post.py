@@ -14,3 +14,6 @@ class Post(Base):
     @property
     def likes_count(self):
         return len(self.likes)
+    @property
+    def comments_count(self):
+        return len(self.comments)
