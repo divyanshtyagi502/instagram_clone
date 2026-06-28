@@ -10,6 +10,7 @@ class PostResponse(BaseModel):
     image_url: str
     owner: UserPublic
     likes_count: int
+    comments_count: int
     
     
     model_config = {

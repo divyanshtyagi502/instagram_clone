@@ -100,6 +100,3 @@ def get_user_posts(user_id: int, db: Session = Depends(get_db)):
         )
     posts = db.query(Post).filter(Post.owner_id == user_id).order_by(Post.created_at.desc()).all()
     return posts    
-      
-    
-    
